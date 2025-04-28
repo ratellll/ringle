@@ -6,6 +6,7 @@ import com.example.entity.Lesson;
 import com.example.entity.Student;
 import com.example.entity.Tutor;
 import com.example.repository.LessonRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class LessonService {
     private final StudentService studentService;
     private final TutorService tutorService;
 
-
+    @Transactional
     public LessonDto bookLesson(Long tutorId, Long studentId, LocalDateTime startTime, LocalDateTime endTime, int duration) {
         Tutor tutor = tutorService.findById(tutorId);
         Student student = studentService.findById(studentId);

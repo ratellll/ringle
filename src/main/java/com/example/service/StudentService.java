@@ -4,6 +4,7 @@ package com.example.service;
 import com.example.dto.StudentDto;
 import com.example.entity.Student;
 import com.example.repository.StudentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class StudentService {
 
 
     private final StudentRepository studentRepository;
-
+    @Transactional
     public StudentDto createStudent(String name) {
         Student student = Student.of(name);
         return StudentDto.fromEntity(studentRepository.save(student));

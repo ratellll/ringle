@@ -8,6 +8,7 @@ import com.example.entity.Tutor;
 import com.example.repository.AvailableTimeRepository;
 import com.example.repository.StudentRepository;
 import com.example.repository.TutorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +25,13 @@ public class AvailableTimeService {
     private final TutorRepository tutorRepository;
 
 
+    @Transactional
     public AvailableTimeDto createAvailableTime(Long tutorId, LocalDateTime startTime, LocalDateTime endTime) {
         Tutor tutor = tutorRepository.findById(tutorId).orElseThrow(() -> new IllegalArgumentException("Tutor 가 맞는지 체크해주십시오"));
         AvailableTime availableTime = AvailableTime.of(startTime, endTime, tutor);
         return AvailableTimeDto.fromEntity(availableTimeRepository.save(availableTime));
     }
-
+    @Transactional
     public void deleteAvailableTime(Long availableTimeId) {
         availableTimeRepository.deleteById(availableTimeId);
     }

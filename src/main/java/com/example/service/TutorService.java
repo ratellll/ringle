@@ -4,6 +4,7 @@ package com.example.service;
 import com.example.dto.TutorDto;
 import com.example.entity.Tutor;
 import com.example.repository.TutorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class TutorService {
 
 
     private final TutorRepository tutorRepository;
-
+    @Transactional
     public TutorDto createTutor(String name) {
         Tutor tutor = Tutor.of(name);
         return TutorDto.fromEntity(tutorRepository.save(tutor));
