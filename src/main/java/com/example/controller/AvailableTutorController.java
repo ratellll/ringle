@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.dto.availabletutor.AvailableTutorRequestDto;
 import com.example.dto.tutor.TutorResponseDto;
 import com.example.service.AvailableTutorService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class AvailableTutorController {
 
     private final AvailableTutorService availableTutorService;
 
+    @Operation(summary = "예약 가능한 튜터 조회")
     @PostMapping
     public ResponseEntity<List<TutorResponseDto>> findAvailableTutors(@Valid @RequestBody AvailableTutorRequestDto request) {
         return ResponseEntity.ok(

@@ -4,6 +4,7 @@ package com.example.controller;
 import com.example.dto.student.StudentRequestDto;
 import com.example.dto.student.StudentResponseDto;
 import com.example.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,12 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-
+    @Operation(summary = "학생 등록")
     @PostMapping
     public ResponseEntity<StudentResponseDto> createStudent(@Valid @RequestBody StudentRequestDto request) {
         return ResponseEntity.ok(studentService.createStudent(request));
     }
-
+    @Operation(summary = "모든 학생 조회")
     @GetMapping
     public ResponseEntity<List<StudentResponseDto>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());

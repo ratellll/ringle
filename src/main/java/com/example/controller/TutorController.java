@@ -5,6 +5,7 @@ import com.example.dto.tutor.TutorRequestDto;
 import com.example.dto.tutor.TutorResponseDto;
 import com.example.entity.Tutor;
 import com.example.service.TutorService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +22,19 @@ public class TutorController {
 
     private final TutorService tutorService;
 
+    @Operation(summary = "튜터 등록")
     @PostMapping
     public ResponseEntity<TutorResponseDto> createTutor(@Valid @RequestBody TutorRequestDto request) {
         return ResponseEntity.ok(tutorService.createTutor(request));
     }
-
+    @Operation(summary = "모든 튜터 조회")
     @GetMapping
     public ResponseEntity<List<TutorResponseDto>> getAllTutors() {
         return ResponseEntity.ok(tutorService.getAllTutors());
     }
-
-    @GetMapping
-    public ResponseEntity<Tutor> getTutorById(@RequestParam Long id) {
+    @Operation(summary = "튜터 단건 조회")
+    @GetMapping("/{id}")
+    public ResponseEntity<Tutor> getTutorById(@PathVariable Long id) {
         return ResponseEntity.ok(tutorService.findById(id));
     }
 
