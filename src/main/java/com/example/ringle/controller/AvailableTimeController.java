@@ -5,6 +5,9 @@ import com.example.ringle.dto.availabletime.AvailableTimeRequestDto;
 import com.example.ringle.dto.availabletime.AvailableTimeResponseDto;
 import com.example.ringle.service.AvailableTimeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +26,27 @@ public class AvailableTimeController {
 
     private final AvailableTimeService availableTimeService;
 
-    @Operation(summary = "강의 시간 등록")
+    @Operation(
+            summary = "강의 시간 등록",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "강의 시간 등록 요청 예시",
+                                    value = "{\n  \"tutorId\": 1,\n  \"startTime\": \"2025-05-01T10:00:00\",\n  \"endTime\": \"2025-05-01T11:00:00\"\n}"
+                            )
+                    )
+            ),
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "등록된 강의 시간",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = " 강의 시간 등록 요청 예시",
+                                    value = "{\n  \"id\": 1,\n  \"startTime\": \"2025-05-01T10:00:00\",\n  \"endTime\": \"2025-05-01T11:00:00\",\n  \"tutorId\": 1\n}"
+                            )
+                    )
+            )
+    )
     @PostMapping
     public ResponseEntity<AvailableTimeResponseDto> createAvailableTime(@Valid @RequestBody AvailableTimeRequestDto request) {
         return ResponseEntity.ok(

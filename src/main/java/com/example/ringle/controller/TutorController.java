@@ -6,6 +6,9 @@ import com.example.ringle.dto.tutor.TutorResponseDto;
 import com.example.ringle.entity.Tutor;
 import com.example.ringle.service.TutorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +25,27 @@ public class TutorController {
 
     private final TutorService tutorService;
 
-    @Operation(summary = "튜터 등록")
+    @Operation(
+            summary = "튜터 등록",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "튜터 등록 요청 예시",
+                                    value = "{\n  \"name\": \"홍길동\"\n}"
+                            )
+                    )
+            ),
+            responses = @ApiResponse(
+                    responseCode = "200",
+                    description = "등록된 튜터",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "튜터 등록 응답 예시",
+                                    value = "{\n  \"id\": 1,\n  \"name\": \"홍길동\"\n}"
+                            )
+                    )
+            )
+    )
     @PostMapping
     public ResponseEntity<TutorResponseDto> createTutor(@Valid @RequestBody TutorRequestDto request) {
         return ResponseEntity.ok(tutorService.createTutor(request));
