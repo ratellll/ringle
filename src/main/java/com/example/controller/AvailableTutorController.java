@@ -1,17 +1,19 @@
 package com.example.controller;
 
-import com.example.dto.TutorDto;
+import com.example.dto.availabletutor.AvailableTutorRequestDto;
+import com.example.dto.tutor.TutorResponseDto;
 import com.example.service.AvailableTutorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+@Tag(name = "AvailableTutor", description = "예약 가능한 튜터 조회 API")
 @RestController
 @RequestMapping("/api/available-tutors")
 @RequiredArgsConstructor
@@ -19,14 +21,10 @@ public class AvailableTutorController {
 
     private final AvailableTutorService availableTutorService;
 
-    @GetMapping
-    public ResponseEntity<List<TutorDto>> findAvailableTutors(
-            @RequestParam Long studentId,
-            @RequestParam LocalDateTime startDateTime,
-            @RequestParam LocalDateTime endDateTime,
-            @RequestParam int duration) {
+    @PostMapping
+    public ResponseEntity<List<TutorResponseDto>> findAvailableTutors(@Valid @RequestBody AvailableTutorRequestDto request) {
         return ResponseEntity.ok(
-                availableTutorService.findAvailableTutors(studentId,startDateTime, endDateTime, duration)
+                availableTutorService.findAvailableTutors(request)
         );
     }
 }

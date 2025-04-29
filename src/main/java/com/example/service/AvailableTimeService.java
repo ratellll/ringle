@@ -1,12 +1,10 @@
 package com.example.service;
 
 
-import com.example.dto.AvailableTimeDto;
-import com.example.dto.TutorDto;
+import com.example.dto.availabletime.AvailableTimeResponseDto;
 import com.example.entity.AvailableTime;
 import com.example.entity.Tutor;
 import com.example.repository.AvailableTimeRepository;
-import com.example.repository.StudentRepository;
 import com.example.repository.TutorRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +24,28 @@ public class AvailableTimeService {
 
 
     @Transactional
-    public AvailableTimeDto createAvailableTime(Long tutorId, LocalDateTime startTime, LocalDateTime endTime) {
-        Tutor tutor = tutorRepository.findById(tutorId).orElseThrow(() -> new IllegalArgumentException("Tutor 가 맞는지 체크해주십시오"));
-        AvailableTime availableTime = AvailableTime.of(startTime, endTime, tutor);
-        return AvailableTimeDto.fromEntity(availableTimeRepository.save(availableTime));
+    public AvailableTimeResponseDto createAvailableTime(Long tutorId, LocalDateTime startTime, LocalDateTime endTime) {
+        Tutor tutor = tutorRepository.findById(tutorId)
+                .orElseThrow(() -> new IllegalArgumentException("Tutor not found: " + tutorId));
+
+        AvailableTime availableTime = AvailableTime.builder()
+                .tutor(tutor)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
+        return AvailableTimeResponseDto.fromEntity(availableTimeRepository.save(availableTime));
     }
+
     @Transactional
     public void deleteAvailableTime(Long availableTimeId) {
         availableTimeRepository.deleteById(availableTimeId);
     }
 
-    public List<AvailableTimeDto> getAvailableTimesByTutor(Long tutorId) {
+    public List<AvailableTimeResponseDto> getAvailableTimesByTutor(Long tutorId) {
         return availableTimeRepository.findAll()
                 .stream()
                 .filter(at -> at.getTutor().getId().equals(tutorId))
-                .map(AvailableTimeDto::fromEntity)
+                .map(AvailableTimeResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

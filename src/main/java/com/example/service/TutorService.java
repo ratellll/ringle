@@ -1,7 +1,8 @@
 package com.example.service;
 
 
-import com.example.dto.TutorDto;
+import com.example.dto.tutor.TutorRequestDto;
+import com.example.dto.tutor.TutorResponseDto;
 import com.example.entity.Tutor;
 import com.example.repository.TutorRepository;
 import jakarta.transaction.Transactional;
@@ -17,16 +18,19 @@ public class TutorService {
 
 
     private final TutorRepository tutorRepository;
+
     @Transactional
-    public TutorDto createTutor(String name) {
-        Tutor tutor = Tutor.of(name);
-        return TutorDto.fromEntity(tutorRepository.save(tutor));
+    public TutorResponseDto createTutor(TutorRequestDto request) {
+        Tutor tutor = Tutor.builder()
+                .name(request.getName())
+                .build();
+        return TutorResponseDto.fromEntity(tutorRepository.save(tutor));
     }
 
-    public List<TutorDto> getAllTutors() {
+    public List<TutorResponseDto> getAllTutors() {
         return tutorRepository.findAll()
                 .stream()
-                .map(TutorDto::fromEntity)
+                .map(TutorResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

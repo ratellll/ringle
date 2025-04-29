@@ -1,7 +1,8 @@
 package com.example.service;
 
 
-import com.example.dto.StudentDto;
+import com.example.dto.student.StudentRequestDto;
+import com.example.dto.student.StudentResponseDto;
 import com.example.entity.Student;
 import com.example.repository.StudentRepository;
 import jakarta.transaction.Transactional;
@@ -17,16 +18,19 @@ public class StudentService {
 
 
     private final StudentRepository studentRepository;
+
     @Transactional
-    public StudentDto createStudent(String name) {
-        Student student = Student.of(name);
-        return StudentDto.fromEntity(studentRepository.save(student));
+    public StudentResponseDto createStudent(StudentRequestDto request) {
+        Student student = Student.builder()
+                .name(request.getName())
+                .build();
+        return StudentResponseDto.fromEntity(studentRepository.save(student));
     }
 
-    public List<StudentDto> findAllStudents() {
+    public List<StudentResponseDto> getAllStudents() {
         return studentRepository.findAll()
                 .stream()
-                .map(StudentDto::fromEntity)
+                .map(StudentResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
